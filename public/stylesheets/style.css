@@ -1,0 +1,38 @@
+body {
+  font: 14px;
+  font-family: 'Roboto', sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+main{
+  padding: 40px;
+}
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgb(48, 48, 48);
+  color: white;
+  padding: 8px 24px;
+  font-weight: 400;
+  border-radius: 10px;
+}
+
+.nav-links {
+  display: flex;
+  list-style-type: none;
+  gap: 12px;
+  font-size: 1rem;
+}
+
+.nav-links a{
+  color: orangered;
+  text-decoration: none;
+  transition: 300ms;
+}
+
+.nav-links a:hover{
+  color: orange;
+}

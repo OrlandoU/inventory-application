@@ -1,0 +1,9 @@
+extends layout 
+
+block content 
+    if categories.length
+        ul.cats-container 
+            for cat in categories 
+              li= cat.name
+    else 
+        p Theres no Categories

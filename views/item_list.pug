@@ -1,0 +1,9 @@
+extends layout 
+
+block content 
+    if items.length
+        ul.cats-container 
+            for item in items
+              li= item.name
+    else 
+        p Theres no Items 
