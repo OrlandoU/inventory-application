@@ -1,6 +1,7 @@
 extends layout 
 
 block content 
+    a.create-link(href='/category/create') Create Category
     if categories.length
         ul.cats-container 
             for cat in categories 

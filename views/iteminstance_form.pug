@@ -1,0 +1,13 @@
+extends layout 
+
+block content 
+  form.create-form(action="" method="POST")
+    h1= title
+    ul 
+      li 
+        label(for="category") Name
+        input(type="text" id='category' name='name' required)
+      li 
+        label(for="description") Description
+        input(type="text" id='description' name='description')
+    button Submit

@@ -1,6 +1,7 @@
 extends layout 
 
 block content 
+    a.create-link(href='/inventory/create') Create Item Instance
     if items.length
         ul.cats-container 
             for item in items

@@ -1,6 +1,7 @@
 extends layout 
 
 block content 
+    a.create-link(href='/item/create') Create Item
     if items.length
         ul.cats-container 
             for item in items

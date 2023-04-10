@@ -12,7 +12,7 @@ exports.index = async (req, res, next) => {
 }
 
 exports.create_get = (req, res) => {
-    res.send("Not Implemented")
+    res.render('item_form')
 }
 
 exports.create_post = (req, res) => {
@@ -35,7 +35,15 @@ exports.delete_post = (req, res) => {
     res.send("Not Implemented")
 }
 
-exports.item_detail = (req, res) => {
-    res.send('Not Implemented')
+exports.item_detail = async (req, res) => {
+    try {
+        let item = await Item.findById(req.params.id)
+        res.render('category_details', {
+            title: 'Category ' + item.name,
+            item
+        })
+    } catch (error) {
+        return next(error)
+    }
 }
 

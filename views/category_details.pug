@@ -1,0 +1,11 @@
+extends layout 
+
+block content 
+    h1=title 
+    div 
+      strong Name 
+      | #{category.name}
+    if  category.description
+     div 
+      strong Description
+      | #{category.description}

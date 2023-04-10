@@ -30,7 +30,7 @@ app.use('/inventory', inventoryRouter)
 app.use('/item', itemRouter)
 
 mongoose.set('strictQuery', false);
-const connectionString = 
+const connectionString = 'mongodb+srv://orlando:Adeus2003@cluster0.xzhigzf.mongodb.net/inventory-application?retryWrites=true&w=majority'
 
 main().catch(err => console.log(err))
 async function main() {
