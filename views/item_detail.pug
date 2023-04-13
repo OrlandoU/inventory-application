@@ -2,13 +2,22 @@ extends layout
 
 block content 
     h1=title 
-    div 
-      strong Name 
-      | #{item.name}
-    if  item.description
-     div 
-      strong Description
-      | #{item.description}
-    div 
-      strong Category
-      | #{item.category}
+    .create-form
+     .form-content
+      
+      .count.header #{item.name}
+      .section 
+        .fieldname Id
+        .count #{item._id}
+      if  item.description
+      .section 
+        .fieldname Description
+        .count #{item.description}
+      a(href=item.category.url) 
+       .section.hover
+        .fieldname Category 
+        .count #{item.category.name}
+          
+      .button-wrapper
+        a(href=item.url+'/delete').delete-button  Delete
+        a(href=item.url+'/update').update-button Update

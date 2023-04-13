@@ -2,5 +2,20 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
-  a(href='/category') Category
+  img(src="/images/logo.svg", alt="Logo").logo.index
+  .index-page
+    p #{title}! Our easy-to-use inventory management app lets you create and manage items and instances with ease. Keep track of inventory levels, monitor stock movements, and stay organized effortlessly. Streamline your inventory management with WaveStock - try it today!
+    .hl
+    .section-wrapper
+      a(href="/category/list") 
+       .section.hover 
+        .header Categories 
+        .count= categoryCount
+      a(href="/item/list") 
+       .section.hover 
+        .header Item Templates
+        .count= itemCount
+      a(href="/inventory") 
+       .section.hover 
+        .header Items in Inventory
+        .count= instanceCount

@@ -1,10 +1,33 @@
-extends layout 
-
+extends layout
 block content 
-    a.create-link(href='/category/create') Create Category
+    div.button-container
+        a(href='/category/create').create-button 
+            span.button-text Create Category
+            img(src="/images/plus.svg", alt="add doc").icon
+
     if categories.length
-        ul.cats-container 
-            for cat in categories 
-              li= cat.name
+      h1 Categories
+      div.table-wrapper
+        table
+            tr 
+                th Name
+                th Description 
+                th Last Modified
+                th Created On 
+                th Id
+                th 
+            for category in categories
+                tr  
+                    td=category.name 
+                    td=category.description
+                    td=category.update_formatted
+                    td=category.create_formatted
+                    td=category._id
+                    td 
+                       a(href=category.url+'/update') 
+                        img.edit(src="/images/pencil.svg", alt="Edit Button")
+                       a(href=category.url+'/delete') 
+                        img.delete(src="/images/delete.svg", alt="Delete Button")
+                       
     else 
-        p Theres no Categories
+        h1 There's no Categories

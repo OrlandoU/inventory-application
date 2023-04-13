@@ -2,10 +2,16 @@ extends layout
 
 block content 
     h1=title 
-    div 
-      strong Name 
-      | #{category.name}
-    if  category.description
-     div 
-      strong Description
-      | #{category.description}
+    .create-form
+     .form-content
+      .count.header #{category.name}
+      .section 
+        .fieldname Id:
+        .count #{category._id}
+      if  category.description
+        .section 
+          .fieldname Description:
+          .count #{category.description}
+      .button-wrapper
+        a(href=category.url+'/delete').delete-button  Delete
+        a(href=category.url+'/update').update-button Update

@@ -2,10 +2,22 @@ extends layout
 
 block content 
     h1=title 
-    div 
-      strong Name 
-      | #{item.name}
-    if  item.description
-     div 
-      strong Description
-      | #{item.description}
+    .create-form
+     .form-content
+      .count.header #{instance.item.name}
+      .section 
+        .fieldname Id:
+        .count #{instance._id}
+      .section 
+        .fieldname On Stock: 
+        .count #{instance.units}
+      .section 
+        .fieldname Details: 
+        .count #{instance.details}
+      if instance.item.description  
+        .section 
+          .fieldname Item Description
+          .count #{instance.item.description}
+      .button-wrapper
+        a(href=instance.url+'/delete').delete-button  Delete 
+        a(href=instance.url+'/update').update-button Update

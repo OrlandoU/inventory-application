@@ -1,0 +1,30 @@
+extends layout 
+
+block content
+  h1=title 
+  if items.length
+   .create-form 
+    header Delete the following Items before deleting #{category.name} Category
+    ul.missing 
+      for item in items
+        li 
+          a(href=item.url).section.hover
+            .fieldname= item._id 
+            .count= item.name 
+  else 
+    form(action="", method="POST").create-form.secondary 
+      h2.form-title Do you really want to remove this Category?
+      .form-content 
+       .section 
+        .fieldname Name
+        .count #{category.name}
+       .section 
+        .fieldname Description 
+        .count #{category.description}
+       .section 
+        .fieldname Id
+        .count #{category._id}
+       
+      input(type="text" hidden value=category._id name='id')
+      .button-wrapper
+        button.delete-button Delete

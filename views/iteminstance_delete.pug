@@ -1,0 +1,21 @@
+extends layout 
+
+block content
+  h1=title
+  form(action="", method="POST").create-form 
+    h2.form-title Do you really want to remove this Item Instance?
+    .form-content
+     .count.header #{instance.item.name}
+     .section 
+      .fieldname Details
+      .count #{instance.details}
+     .section 
+      .fieldname Units
+      .count #{instance.units}
+     .section 
+      .fieldname Id
+      .count #{instance.item._id}
+    input(type="text" hidden value=(instance._id) name='id')
+    .button-wrapper
+     button.delete-button Delete 
+    

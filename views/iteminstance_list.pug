@@ -1,10 +1,38 @@
 extends layout 
 
 block content 
-    a.create-link(href='/inventory/create') Create Item Instance
+    div.button-container
+        a(href='/inventory/create').create-button 
+            span.button-text Create Instance
+            img(src="/images/plus.svg", alt="add doc").icon
+
     if items.length
-        ul.cats-container 
+      h1 Items on Stock
+      div.table-wrapper
+        table
+            tr 
+                th Name
+                th Details 
+                th Category 
+                th Units
+                th Last Modified
+                th Created On  
+                th Id
+                th 
             for item in items
-              li= item.name
+                tr  
+                    td=item.item.name 
+                    td=item.description
+                    td=item.item.category.name
+                    td=item.units
+                    td=item.update_formatted
+                    td=item.create_formatted 
+                    td=item._id
+                    td 
+                       a(href=item.url+'/update') 
+                        img.edit(src="/images/pencil.svg", alt="Edit Button")
+                       a(href=item.url+'/delete') 
+                        img.delete(src="/images/delete.svg", alt="Delete Button")
+                       
     else 
-        p Theres no Items 
+        h1 There's no Items on Stock 

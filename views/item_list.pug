@@ -1,10 +1,36 @@
 extends layout 
 
 block content 
-    a.create-link(href='/item/create') Create Item
+    div.button-container
+        a(href='/item/create').create-button 
+            span.button-text Create Item
+            img(src="/images/plus.svg", alt="add doc").icon
+
     if items.length
-        ul.cats-container 
-            for item in items
-              li= item.name
+      h1 Item Templates
+      div.table-wrapper
+        table
+            tr 
+                th Item Name
+                th Description 
+                th Category
+                th Last Modified
+                th Created On  
+                th Id
+                th 
+            for item in items 
+                tr  
+                    td=item.name 
+                    td=item.description
+                    td=item.category.name
+                    td=item.update_formatted
+                    td=item.create_formatted 
+                    td=item._id
+                    td 
+                       a(href=item.url+'/update') 
+                        img.edit(src="/images/pencil.svg", alt="Edit Button")
+                       a(href=item.url+'/delete') 
+                        img.delete(src="/images/delete.svg", alt="Delete Button")
+                       
     else 
-        p Theres no Items 
+        h1 There's no Items Template

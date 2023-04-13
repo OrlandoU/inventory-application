@@ -1,0 +1,32 @@
+extends layout 
+
+block content
+  h1=title 
+  if instances.length 
+   .create-form
+    header Delete the following Items Instances before deleting #{item.name} Template
+    ul.missing 
+      for instance in instances 
+       li
+        a(href=instance.url).section.hover
+          .fieldname=instance._id
+          .count= instance.item.name
+  else 
+    form(action="" method='POST').create-form 
+      h2.form-title Do you really want to remove this Item Template?
+      .form-content
+       .section 
+        .fieldname Name 
+        .count #{item.name}
+       .section 
+        .fieldname Description
+        .count #{item.description}
+       .section 
+        .fieldname Category
+        .count #{item.category.name}
+       .section 
+        .fieldname Id
+        .count #{item._id}
+      input(type="text" value=(item._id) hidden name='id')
+      .button-wrapper
+        button.delete-button Delete

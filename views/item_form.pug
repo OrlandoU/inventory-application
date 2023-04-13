@@ -1,18 +1,28 @@
 extends layout 
 
 block content 
+  h1= title
   form.create-form(action="" method="POST")
-    h1= title
     ul 
       li 
+        input(type="text" id='category' name='name' required value=(item === undefined ? '': item.name))
         label(for="category") Name
-        input(type="text" id='category' name='name' required)
       li 
+        textarea(type="text" id='description' rows='8' name='description')
+          if item !== undefined
+           | #{item.description}
         label(for="description") Description
-        input(type="text" id='description' name='description')
-      if categories
-        li 
-            select(name='category')
-             each category in categories 
-              option(value=category._id)= category.name
+      li 
+        select(name='category' id='category')
+          each category in categories 
+            option(value=category._id selected=(category.selected? true: false))= category.name
+        label(for="category") Category
+      if !(item == undefined)
+        input(type="text" value=item._id hidden name='id')
+      if errors
+       li 
+         div.errors
+           for error in errors 
+             div= error.msg
+    span.dot
     button Submit
