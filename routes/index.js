@@ -5,12 +5,18 @@ const Item = require('../models/item')
 const ItemInstance = require('../models/iteminstance')
 
 /* GET home page. */
-router.get('/', async function(req, res, next) {
-  const categoryCount = await Category.countDocuments()
-  const itemCount = await Item.countDocuments()
-  const instanceCount = await ItemInstance.countDocuments()
+router.get('/', async function (req, res, next) {
+  const categoryCount = await Category.countDocuments({ user: req.user.id })
+  const itemCount = await Item.countDocuments({ user: req.user.id })
+  const instanceCount = await ItemInstance.countDocuments({ user: req.user.id })
 
-  res.render('index', { title: 'Welcome to WaveStock', categoryCount, itemCount, instanceCount });
+  res.render('index', {
+    title: 'Welcome to WaveStock',
+    categoryCount,
+    itemCount,
+    instanceCount,
+    auth: req.user
+  });
 });
 
 module.exports = router;

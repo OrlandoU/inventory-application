@@ -1,0 +1,22 @@
+extends layout_alt 
+
+block content 
+  h1= title
+  form.create-form(action="" method="POST")
+    ul 
+      li 
+        input(type="text" id='category' name='username' required value=(undefined === user? '': user.name) minLength='8')
+        label(for="category") Username
+      li 
+        input(type="text" id='category' name='password' required minLength='8')
+        label(for="category") Password
+      li 
+        input(type="text" id='category' name='password_confirmation' required minLength='8')
+        label(for="category") Password Confirmation
+      if errors
+       li 
+         div.errors
+           for error in errors 
+             div= error.msg
+    span.dot
+    button Sign Up

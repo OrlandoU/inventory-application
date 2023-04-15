@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const ItemInstanceSchema = new Schema({
+    user: { type: Schema.Types.ObjectId, ref: 'User' },
     item: {type: Schema.Types.ObjectId, required: true, ref:'Item'},
     units: {type: Number},
     details: {type: String, maxLength: 300},

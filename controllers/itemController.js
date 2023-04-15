@@ -5,9 +5,10 @@ const { body, validationResult } = require('express-validator')
 
 exports.index = async (req, res, next) => {
     try {
-        let items = await Item.find().populate('category')
+        let items = await Item.find({user: req.user.id}).populate('category')
         res.render('item_list', {
-            items
+            items,
+            auth: req.user
         })
     } catch (error) {
         return next(error)
@@ -16,8 +17,9 @@ exports.index = async (req, res, next) => {
 
 exports.create_get = async (req, res, next) => {
     try {
-        let categories = await Category.find()
+        let categories = await Category.find({user: req.user.id})
         res.render('item_form', {
+            auth: req.user,
             title: 'Create Item Template',
             categories
         })
@@ -50,12 +52,13 @@ exports.create_post = [
         const item = new Item({
             name: req.body.name,
             description: req.body.description,
-            category: req.body.category
+            category: req.body.category,
+            user: req.user.id
         })
 
 
         if (!errors.isEmpty()) {
-            Category.find().then((values) => {
+            Category.find({user: req.user.id}).then((values) => {
                 values.forEach(val => {
                     if (val._id == req.body.category) {
                         val.selected = true
@@ -64,6 +67,7 @@ exports.create_post = [
 
                 res.render('item_form', {
                     errors: errors.array(),
+                    auth: req.user,
                     title: req.body.category,
                     item,
                     categories: values
@@ -82,7 +86,7 @@ exports.create_post = [
 
 exports.update_get = async (req, res, next) => {
     try {
-        const categories = await Category.find()
+        const categories = await Category.find({user: req.user.id})
         const item = await Item.findById(req.params.id)
 
         if (!item) {
@@ -94,6 +98,7 @@ exports.update_get = async (req, res, next) => {
             }
         })
         res.render('item_form', {
+            auth: req.user,
             title: 'Update Item Template',
             item,
             categories
@@ -128,12 +133,13 @@ exports.update_post = [
             description: req.body.description,
             category: req.body.category,
             _id: req.body.id,
-            update_date: new Date()
+            update_date: new Date(),
+            user: req.user.id
         })
 
 
         if (!errors.isEmpty()) {
-            Category.find().then((values) => {
+            Category.find({user: req.user.id}).then((values) => {
                 values.forEach(val => {
                     if (val._id == req.body.category) {
                         val.selected = true
@@ -142,6 +148,7 @@ exports.update_post = [
 
                 res.render('item_form', {
                     errors: errors.array(),
+                    auth: req.user,
                     title: req.body.category,
                     item,
                     categories: values
@@ -160,14 +167,15 @@ exports.update_post = [
 
 exports.delete_get = async (req, res, next) => {
     try {
-        const instances = await ItemInstance.find({ item: req.params.id }).populate('item')
-        const item = await Item.findById(req.params.id).populate('category')
+        const instances = await ItemInstance.find({ item: req.params.id, user: req.user.id }).populate('item')
+        const item = await Item.findOne({ _id: req.params.id, user: req.user.id }).populate('category')
 
         if (!item) {
             return res.redirect('/item/list')
         }
 
         res.render('item_delete', {
+            auth: req.user,
             title: 'Delete Item',
             instances,
             item
@@ -180,8 +188,8 @@ exports.delete_get = async (req, res, next) => {
 
 exports.delete_post = async (req, res) => {
     try {
-        const instances = await ItemInstance.find({ item: req.body.id }).populate('item')
-        const item = await Item.findById(req.body.id)
+        const instances = await ItemInstance.find({ item: req.body.id, user: req.user.id }).populate('item')
+        const item = await Item.findOne({ _id: req.body.id, user: req.user.id })
 
         if (!item) {
             return res.redirect('/item/list')
@@ -198,8 +206,9 @@ exports.delete_post = async (req, res) => {
 
 exports.item_detail = async (req, res) => {
     try {
-        let item = await Item.findById(req.params.id).populate('category')
+        let item = await Item.findOne({ _id: req.params.id, user: req.user.id }).populate('category')
         res.render('item_detail', {
+            auth: req.user,
             title: 'Item ' + item.name,
             item
         })

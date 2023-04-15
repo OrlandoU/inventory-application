@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const ItemSchema = new Schema({
+    user: { type: Schema.Types.ObjectId, ref: 'User' },
     name: {type: String, maxLength: 50, required: true},
     description: {type: String, maxLength: 200, default: 'There is no description'},
     category: {type: Schema.Types.ObjectId, ref:'Category', required: true},

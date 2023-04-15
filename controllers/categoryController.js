@@ -4,8 +4,9 @@ const { body, validationResult } = require('express-validator')
 
 exports.categories_list = async (req, res, next) => {
     try {
-        let categories = await Category.find()
+        let categories = await Category.find({ user: req.user.id })
         res.render('category_list', {
+            auth: req.user,
             categories
         })
     } catch (error) {
@@ -15,10 +16,9 @@ exports.categories_list = async (req, res, next) => {
 
 exports.create_get = async (req, res, next) => {
     try {
-        let categories = await Category.find()
         res.render('category_form', {
+            auth: req.user,
             title: 'Create Category',
-            categories
         })
     } catch (error) {
         return next(err)
@@ -44,11 +44,13 @@ exports.create_post = [
 
         const category = new Category({
             name: req.body.name,
-            description: req.body.description
+            description: req.body.description,
+            user: req.user.id
         })
 
         if (!errors.isEmpty()) {
             res.render('category_form', {
+                auth: req.user,
                 title: 'Create Category',
                 category: req.body,
                 errors: errors.array()
@@ -65,7 +67,7 @@ exports.create_post = [
 ]
 
 exports.update_get = (req, res, next) => {
-    Category.findById(req.params.id).then(category=>{
+    Category.findOne({ _id: req.params.id, user: req.user.id }).then(category=>{
         res.render('category_form', {
             category
         })
@@ -93,11 +95,13 @@ exports.update_post = [
             name: req.body.name,
             description: req.body.description,
             _id: req.body.id,
-            update_date: new Date()
+            update_date: new Date(),
+            user: req.user.id
         })
 
         if (!errors.isEmpty()) {
             res.render('category_form', {
+                auth: req.user,
                 title: 'Create Category',
                 category: req.body,
                 errors: errors.array()
@@ -115,14 +119,15 @@ exports.update_post = [
 
 exports.delete_get = async (req, res, next) => {
     try {
-        const items = await Item.find({ category: req.params.id })
-        const category = await Category.findById(req.params.id)
+        const items = await Item.find({ category: req.params.id, user: req.user.id })
+        const category = await Category.findOne({ _id: req.params.id, user: req.user.id })
         
         if(!category){
             return res.redirect('/category/list')
         }
 
         res.render('category_delete', {
+            auth: req.user,
             title: 'Delete Category',
             category,
             items
@@ -134,10 +139,10 @@ exports.delete_get = async (req, res, next) => {
 
 exports.delete_post = async (req, res, next) => {
     try {
-        const items = await Item.find({category: req.body.id})
-        const category = await Category.findById(req.body.id)
+        const items = await Item.find({ category: req.body.id, user: req.user.id })
+        const category = await Category.findOne({ _id: req.params.id, user: req.user.id })
         if(!category){
-            return next()
+            throw Error('Category not Found')
         }
 
         if(items.length){
@@ -153,8 +158,9 @@ exports.delete_post = async (req, res, next) => {
 
 exports.category_detail = async (req, res, next) => {
     try {
-        let category = await Category.findById(req.params.id)
+        let category = await Category.findById({_id:req.params.id, user: req.user.id})
         res.render('category_details', { 
+            auth: req.user,
             title: 'Category ' + category.name,
             category 
         })

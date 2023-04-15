@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const CategorySchema = new Schema({
+    user: {type: Schema.Types.ObjectId, ref: 'User'},
     name: {type: String, maxLength: 50, required: true},
     description: { type: String, maxLength: 200},
     update_date: {type: Date}

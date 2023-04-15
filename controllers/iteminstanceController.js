@@ -4,19 +4,21 @@ const Item = require('../models/item')
 
 exports.index = async (req, res, next) => {
     try {
-        let itemsOnStock = await ItemInstance.find().populate({path:'item', populate: {path: 'category', select: {name: 1}}})
+        let itemsOnStock = await ItemInstance.find({ user: req.user.id }).populate({path:'item', populate: {path: 'category', select: {name: 1}}})
         res.render("iteminstance_list", {
-            items: itemsOnStock
+            items: itemsOnStock,
+            auth: req.user
         })
     } catch (error) {
         return next(error)
     }
 }
 exports.create_get = (req, res, next) => {
-    Item.find().then(results => {
+    Item.find({ user: req.user.id }).then(results => {
         res.render('iteminstance_form', {
+            auth: req.user,
             title: 'Create Item Instances',
-            items: results
+            items: results,
         })
     }).catch(err => next(err))
 }
@@ -36,13 +38,15 @@ exports.create_post = [
         const instance = new ItemInstance({
             details: req.body.details,
             item: req.body.item,
-            units: req.body.units
+            units: req.body.units,
+            user: req.user.id
         })
 
         if (!errors.isEmpty()) {
-            Item.find().then(result => {
+            Item.find({ user: req.user.id }).then(result => {
                 result.forEach(el => el._id == req.body.item ? el.selected = true : null)
                 res.render('iteminstance_form', {
+                    auth: req.user,
                     title: 'Create Item Instances',
                     items: result,
                     errors: errors.array(),
@@ -59,8 +63,8 @@ exports.create_post = [
 
 exports.update_get = async (req, res, next) => {
     try {
-        const items = await Item.find()
-        const instance = await ItemInstance.findById(req.params.id)
+        const items = await Item.find({ user: req.user.id })
+        const instance = await ItemInstance.findOne({ _id: req.params.id, user: req.user.id })
         items.forEach(item=>{
             if(item._id.equals(instance.item)){
                 item.selected = true
@@ -68,6 +72,7 @@ exports.update_get = async (req, res, next) => {
         })
 
         res.render('iteminstance_form', {
+            auth: req.user,
             title: 'Update Item Instance',
             items,
             instance
@@ -94,13 +99,15 @@ exports.update_post = [
             item: req.body.item,
             units: req.body.units,
             _id: req.body.id,
-            update_date: new Date()
+            update_date: new Date(),
+            user: req.user.id
         })
 
         if (!errors.isEmpty()) {
-            Item.find().then(result => {
+            Item.find({ user: req.user.id }).then(result => {
                 result.forEach(el => el._id == req.body.item ? el.selected = true : null)
                 res.render('iteminstance_form', {
+                    auth: req.user,
                     title: 'Create Item Instances',
                     items: result,
                     errors: errors.array(),
@@ -116,8 +123,9 @@ exports.update_post = [
 ]
 
 exports.delete_get = (req, res, next) => {
-    ItemInstance.findById(req.params.id).populate('item').then(instance=>{
+    ItemInstance.findOne({ _id: req.params.id, user: req.user.id }).populate('item').then(instance=>{
         res.render('iteminstance_delete', {
+            auth: req.user,
             title: 'Delete Instance',
             instance
         })
@@ -131,9 +139,10 @@ exports.delete_post = (req, res, next) => {
 }
 
 exports.item_detail = async (req, res) => {
-    let queriedInstance = await ItemInstance.findById(req.params.id).populate('item')
+    let queriedInstance = await ItemInstance.findOne({ _id: req.params.id, user: req.user.id }).populate('item')
     res.render('iteminstance_detail', {
         item: queriedInstance.item,
+        auth: req.user,
         title: 'Item Instance ' + queriedInstance.item.name,
         instance: queriedInstance
     })
