@@ -10,7 +10,7 @@ router.post('/sign-up', authController.signup_post)
 
 router.get('/login', authController.login_get)
 
-router.post('/login', passport.authenticate('local'), [
+router.post('/login', passport.authenticate('local', {failureRedirect: '/auth/login'}), [
     (req, res) => {
         if (!req.user) {
             res.render('login', {
