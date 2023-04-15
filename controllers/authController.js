@@ -50,10 +50,7 @@ exports.signup_post = [
                 })
             } else {
                 await user.save()
-                passport.authenticate('local', {
-                    successRedirect: '/',
-                    failureRedirect: '/'
-                })
+                res.redirect('/')
             }   
         } catch (error) {
             return next(error)
@@ -63,10 +60,6 @@ exports.signup_post = [
 
 exports.login_get = (req, res, next) => {
     res.render('login', {title: 'Login'})
-}
-
-exports.login_post = (req, res, next) => {
-    passport.authenticate('local')
 }
 
 exports.logout = (req, res, next) => {
