@@ -63,11 +63,11 @@ exports.login_get = (req, res, next) => {
 }
 
 exports.logout = (req, res, next) => {
-    req.logout((err)=>{
+    req.logOut((err)=>{
         if(err){
             return next(err)
         }
-        res.redirect('/')
     })
+    return res.redirect('/')
 }
 
